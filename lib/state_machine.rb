@@ -15,6 +15,9 @@ module StateMachine
   attr_reader :current_state
 
   def initialize
+    unless self.class.initial
+      raise Errors::InitialStateMissing, 'Initial state has not been defined'
+    end
     super
     self.current_state = self.class.initial
   end

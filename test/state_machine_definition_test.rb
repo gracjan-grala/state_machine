@@ -16,14 +16,13 @@ describe 'state machine definition' do
 
   describe 'with no initial state' do
     it 'raises InitialStateMissing' do
-      skip
       assert_raises StateMachine::Errors::InitialStateMissing do
         Class.new do
           include StateMachine
 
           state :standing
           state :walking
-        end
+        end.new
       end
     end
   end

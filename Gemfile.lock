@@ -4,6 +4,7 @@ GEM
     minitest (5.8.3)
     minitest-assert_errors (0.1.0)
       minitest
+    ruby-graphviz (1.2.2)
 
 PLATFORMS
   ruby
@@ -11,6 +12,7 @@ PLATFORMS
 DEPENDENCIES
   minitest
   minitest-assert_errors
+  ruby-graphviz
 
 BUNDLED WITH
    1.12.5

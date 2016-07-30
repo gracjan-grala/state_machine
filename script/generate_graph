@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+require_relative '../lib/state_machine'
+require 'graphviz'
+
+class GraphGenerator
+  def initialize(state_machine)
+    @state_machine = state_machine
+    @graph = GraphViz.new(:G, type: :digraph)
+    add_nodes
+    add_edges
+  end
+
+  def save_to_file(filepath)
+    @graph.output(png: filepath)
+  end
+
+  private
+
+  def add_nodes
+    @nodes = @state_machine.states.keys.reduce({}) do |acc, state_name|
+      acc[state_name] = @graph.add_nodes(state_name.to_s)
+      acc
+    end
+  end
+
+  def add_edges
+    @state_machine.events.each do |name, event|
+      event.from.each do |from|
+        @graph.add_edges(@nodes[from], @nodes[event.to], label: name)
+      end
+    end
+  end
+end
+
+if ARGV.count != 3
+  puts "Usage: script/generate_graph <filepath containing state machine definition> <state machine class name> <output image>"
+  puts "Example: script/generate_graph script/example.rb ExampleStateMachine example.png"
+  exit
+end
+
+require_relative "../#{ARGV[0]}"
+state_machine = Kernel.const_get(ARGV[1])
+output_path = ARGV[2]
+
+GraphGenerator.new(state_machine).save_to_file(output_path)

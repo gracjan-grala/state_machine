@@ -1,6 +1,6 @@
 module StateMachine
   class Event
-    attr_reader :to
+    attr_reader :from, :to
 
     def initialize(from:, to:, guard: nil)
       raise Errors::InvalidDestinationState unless to.respond_to?(:to_sym)

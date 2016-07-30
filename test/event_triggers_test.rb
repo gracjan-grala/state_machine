@@ -43,7 +43,7 @@ describe 'event triggers' do
 
   describe 'when trying to stage files' do
     it 'raises IllegalTransition' do
-      assert_raises StateMachine::Error::IllegalTransition do
+      assert_raises StateMachine::Errors::IllegalTransition do
         @git.add!
       end
     end
@@ -100,7 +100,7 @@ describe 'event triggers' do
 
     describe 'when hard-resetting to HEAD' do
       it 'raises IllegalTransition' do
-        assert_raises StateMachine::Error::IllegalTransition do
+        assert_raises StateMachine::Errors::IllegalTransition do
           @git.reset_hard_head!
         end
         @git.current_state.must_equal :ahead

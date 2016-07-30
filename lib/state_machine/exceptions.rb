@@ -1,10 +1,10 @@
 module StateMachine
-  class StateMachineError < StandardError; end
+  class Error < StandardError; end
 
-  module Error
-    class UndefinedState < StateMachineError; end
-    class InitialStateAlreadyDefined < StateMachineError; end
-    class InitialStateMissing < StateMachineError; end
-    class IllegalTransition < StateMachineError; end
+  module Errors
+    class UndefinedState < StateMachine::Error; end
+    class InitialStateAlreadyDefined < StateMachine::Error; end
+    class InitialStateMissing < StateMachine::Error; end
+    class IllegalTransition < StateMachine::Error; end
   end
 end

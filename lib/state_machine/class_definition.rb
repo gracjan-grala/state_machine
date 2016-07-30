@@ -7,7 +7,7 @@ module StateMachine
     def state(state_name, options = {})
       if options[:initial]
         if @initial
-          raise Error::InitialStateAlreadyDefined, 'Initial state has already been defined'
+          raise Errors::InitialStateAlreadyDefined, 'Initial state has already been defined'
         end
         @initial = state_name
       end
@@ -29,7 +29,7 @@ module StateMachine
 
       define_method "#{event_name}!" do
         unless send("can_#{event_name}?")
-          raise Error::IllegalTransition,
+          raise Errors::IllegalTransition,
                 "Event #{event_name} doesn't allow transition
                 from #{current_state} to #{destination_state}"
         end
@@ -46,7 +46,7 @@ module StateMachine
     def validate_states(*states)
       states.flatten.each do |state|
         unless @states.key?(state)
-          raise Error::UndefinedState, "State #{@state} has not been defined"
+          raise Errors::UndefinedState, "State #{@state} has not been defined"
         end
       end
     end

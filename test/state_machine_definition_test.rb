@@ -3,7 +3,7 @@ require_relative './test_helper'
 describe 'state machine definition' do
   describe 'multiple initial states' do
     it 'raises InitialStateAlreadyDefined' do
-      assert_raises StateMachine::Error::InitialStateAlreadyDefined do
+      assert_raises StateMachine::Errors::InitialStateAlreadyDefined do
         Class.new do
           include StateMachine
 
@@ -17,7 +17,7 @@ describe 'state machine definition' do
   describe 'with no initial state' do
     it 'raises InitialStateMissing' do
       skip
-      assert_raises StateMachine::Error::InitialStateMissing do
+      assert_raises StateMachine::Errors::InitialStateMissing do
         Class.new do
           include StateMachine
 
@@ -29,8 +29,8 @@ describe 'state machine definition' do
   end
 
   describe 'given transition from undefined state' do
-    it 'raises UndefinedStateError' do
-      assert_raises StateMachine::Error::UndefinedState do
+    it 'raises UndefinedState' do
+      assert_raises StateMachine::Errors::UndefinedState do
         Class.new do
           include StateMachine
 
@@ -45,8 +45,8 @@ describe 'state machine definition' do
   end
 
   describe 'given transition to undefined state' do
-    it 'raises UndefinedStateError' do
-      assert_raises StateMachine::Error::UndefinedState do
+    it 'raises UndefinedState' do
+      assert_raises StateMachine::Errors::UndefinedState do
         Class.new do
           include StateMachine
 

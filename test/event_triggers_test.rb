@@ -2,6 +2,7 @@ require_relative './test_helper'
 
 class SimpleGit
   include StateMachine
+  attr_reader :confirmation, :push_counter
 
   state :up_to_date, initial: true
   state :unstaged
@@ -26,6 +27,23 @@ class SimpleGit
 
   event :reset_hard_head do
     transitions from: :unstaged, to: :up_to_date
+  end
+
+  before_transition :show_confirmation, from: :unstaged, to: :up_to_date
+  after_transition :increment_push_counter, from: :ahead
+
+  def show_confirmation
+    @confirmation.show!
+  end
+
+  def increment_push_counter
+    @push_counter += 1
+  end
+
+  def initialize
+    super
+    @confirmation = MiniTest::Mock.new
+    @push_counter = 0
   end
 end
 
@@ -62,7 +80,8 @@ describe 'event triggers' do
     end
 
     describe 'when hard-resetting to HEAD' do
-      it 'changes state to :up_to_date' do
+      it 'changes state to :up_to_date and shows confirmation' do
+        @git.confirmation.expect(:show!, nil)
         @git.reset_hard_head!
         @git.current_state.must_equal :up_to_date
       end
@@ -105,6 +124,20 @@ describe 'event triggers' do
         end
         @git.current_state.must_equal :ahead
       end
+    end
+  end
+
+  describe 'with callbacks' do
+    before do
+      @git.modify_files!
+      @git.add!
+      @git.commit!
+    end
+
+    it 'increments the push counter' do
+      @git.push_counter.must_equal 0
+      @git.push!
+      @git.push_counter.must_equal 1
     end
   end
 end

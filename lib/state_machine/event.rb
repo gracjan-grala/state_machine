@@ -1,5 +1,3 @@
-require_relative './exceptions'
-
 module StateMachine
   class Event
     attr_reader :to
@@ -19,12 +17,7 @@ module StateMachine
     private
 
     def guard_clause_passed?(caller)
-      @guard.nil? || !!invoke_guard(caller)
-    end
-
-    def invoke_guard(caller)
-      return @guard.call if @guard.is_a?(Proc)
-      caller.send(@guard) if @guard.is_a?(Symbol)
+      @guard.nil? || !!Helpers.invoke_code_on_caller(@guard, caller)
     end
   end
 end

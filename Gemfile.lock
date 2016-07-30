@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     minitest (5.8.3)
     minitest-assert_errors (0.1.0)
@@ -12,4 +13,4 @@ DEPENDENCIES
   minitest-assert_errors
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

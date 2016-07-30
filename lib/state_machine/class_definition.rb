@@ -24,7 +24,8 @@ module StateMachine
       destination_state = transitions.to
 
       define_method "can_#{event_name}?" do
-        self.class.events[event_name.to_sym].transition?(from: current_state, to: destination_state)
+        self.class.events[event_name.to_sym]
+          .transition?(from: current_state, to: destination_state, caller: self)
       end
 
       define_method "#{event_name}!" do
@@ -37,10 +38,10 @@ module StateMachine
       end
     end
 
-    def transitions(from:, to:)
-      validate_states(from, to)
+    def transitions(options)
+      validate_states(options[:from], options[:to])
 
-      Event.new(from: from, to: to)
+      Event.new(from: options[:from], to: options[:to], guard: options[:when])
     end
 
     def validate_states(*states)

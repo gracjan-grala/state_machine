@@ -6,5 +6,6 @@ module StateMachine
     class InitialStateAlreadyDefined < StateMachine::Error; end
     class InitialStateMissing < StateMachine::Error; end
     class IllegalTransition < StateMachine::Error; end
+    class InvalidDestinationState < StateMachine::Error; end
   end
 end

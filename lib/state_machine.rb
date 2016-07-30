@@ -15,6 +15,7 @@ module StateMachine
   attr_reader :current_state
 
   def initialize
+    super
     self.current_state = self.class.initial
   end
 

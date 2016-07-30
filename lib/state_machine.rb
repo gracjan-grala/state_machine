@@ -1,56 +1,21 @@
+require_relative './state_machine/class_definition'
+require_relative './state_machine/exceptions'
+require_relative './state_machine/state'
+
 module StateMachine
   def self.included(base)
-    base.extend(ClassMethods)
+    base.extend(ClassDefinition)
     base.instance_variable_set(:@states, {})
     base.instance_variable_set(:@initial, nil)
   end
 
-  module ClassMethods
-    def state(name, options = {})
-      @states[name] = State.new(name)
-      if options[:initial]
-        raise InitialStateAlreadyDefined.new(@initial) if @initial
-        @initial = name
-      end
-    end
+  attr_reader :current_state
 
-    def event(name, &block)
-      yield
-    end
-
-    def transitions(from: , to:)
-      validate_states(from, to)
-    end
-
-    def validate_states(*states)
-      states.flatten.each do |state|
-        raise UndefinedStateError.new(state) unless @states.has_key?(state)
-      end
-    end
+  def set_state(name)
+    @current_state = name.to_sym
   end
 
-  class StateMachineError < StandardError; end
-  class UndefinedStateError < StateMachineError
-    def initialize(state_name)
-      @state_name = state_name
-    end
-
-    def to_s
-      "State #{@state_name} has not been defined"
-    end
-  end
-  class InitialStateAlreadyDefined < StateMachineError
-    def to_s
-      'Initial state has already been defined'
-    end
-  end
-  class InitialStateMissing < StateMachineError; end
-end
-
-class State
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
+  def initialize
+    set_state(self.class.initial)
   end
 end

@@ -1,11 +1,9 @@
-require 'minitest/autorun'
-require 'minitest/assert_errors'
-require_relative '../lib/state_machine'
+require_relative './test_helper'
 
 describe StateMachine do
   describe 'multiple initial states' do
     it 'raises InitialStateAlreadyDefined' do
-      assert_raises StateMachine::InitialStateAlreadyDefined do
+      assert_raises StateMachine::Error::InitialStateAlreadyDefined do
         Class.new do
           include StateMachine
 
@@ -19,7 +17,7 @@ describe StateMachine do
   describe 'with no initial state' do
     it 'raises InitialStateMissing' do
       skip
-      assert_raises StateMachine::InitialStateMissing do
+      assert_raises StateMachine::Error::InitialStateMissing do
         Class.new do
           include StateMachine
 
@@ -32,7 +30,7 @@ describe StateMachine do
 
   describe 'given transition from undefined state' do
     it 'raises UndefinedStateError' do
-      assert_raises StateMachine::UndefinedStateError do
+      assert_raises StateMachine::Error::UndefinedState do
         Class.new do
           include StateMachine
 
@@ -48,7 +46,7 @@ describe StateMachine do
 
   describe 'given transition to undefined state' do
     it 'raises UndefinedStateError' do
-      assert_raises StateMachine::UndefinedStateError do
+      assert_raises StateMachine::Error::UndefinedState do
         Class.new do
           include StateMachine
 

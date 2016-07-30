@@ -11,11 +11,13 @@ module StateMachine
 
   attr_reader :current_state
 
-  def set_state(name)
-    @current_state = name.to_sym
+  def initialize
+    self.current_state = self.class.initial
   end
 
-  def initialize
-    set_state(self.class.initial)
+  private
+
+  def current_state=(name)
+    @current_state = name.to_sym
   end
 end

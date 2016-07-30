@@ -11,10 +11,21 @@ module StateMachine
       end
 
       @states[name] = State.new(name)
+      define_method "#{name}?" do
+        current_state == name.to_sym
+      end
     end
 
     def event(name, &block)
       yield
+
+      define_method "#{name}!" do
+        self.current_state = name
+      end
+
+      define_method "can_#{name}?" do
+        true
+      end
     end
 
     def transitions(from:, to:)

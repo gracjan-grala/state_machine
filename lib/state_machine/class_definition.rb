@@ -2,34 +2,36 @@ module StateMachine
   module ClassDefinition
     attr_reader :states, :initial
 
-    def state(name, options = {})
+    def state(state_name, options = {})
       if options[:initial]
         if @initial
           raise Error::InitialStateAlreadyDefined, 'Initial state has already been defined'
         end
-        @initial = name
+        @initial = state_name
       end
 
-      @states[name] = State.new(name)
-      define_method "#{name}?" do
-        current_state == name.to_sym
+      @states[state_name] = State.new(state_name)
+      define_method "#{state_name}?" do
+        current_state == state_name.to_sym
       end
     end
 
-    def event(name, &block)
-      yield
+    def event(event_name)
+      transitions = yield
 
-      define_method "#{name}!" do
-        self.current_state = name
+      define_method "can_#{event_name}?" do
+        true
       end
 
-      define_method "can_#{name}?" do
-        true
+      define_method "#{event_name}!" do
+        self.current_state = transitions[:to]
       end
     end
 
     def transitions(from:, to:)
       validate_states(from, to)
+
+      { from: Helpers.coerce_array(from).map(&:to_sym), to: to.to_sym }
     end
 
     def validate_states(*states)

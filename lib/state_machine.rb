@@ -1,5 +1,6 @@
 require_relative './state_machine/class_definition'
 require_relative './state_machine/exceptions'
+require_relative './state_machine/helpers'
 require_relative './state_machine/state'
 
 module StateMachine

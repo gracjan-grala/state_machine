@@ -15,7 +15,7 @@ class ExampleStateMachine
   end
 end
 
-describe ExampleStateMachine do
+describe 'dynamic method definitions' do
   before do
     @state_machine = ExampleStateMachine.new
   end

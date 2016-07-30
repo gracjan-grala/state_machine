@@ -1,6 +1,6 @@
 require_relative './test_helper'
 
-describe StateMachine do
+describe 'state machine definition' do
   describe 'multiple initial states' do
     it 'raises InitialStateAlreadyDefined' do
       assert_raises StateMachine::Error::InitialStateAlreadyDefined do

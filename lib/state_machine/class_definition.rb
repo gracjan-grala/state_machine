@@ -1,6 +1,8 @@
 module StateMachine
   module ClassDefinition
-    attr_reader :states, :initial
+    attr_reader :states, :initial, :events
+
+    private
 
     def state(state_name, options = {})
       if options[:initial]
@@ -18,20 +20,27 @@ module StateMachine
 
     def event(event_name)
       transitions = yield
+      @events[event_name.to_sym] = transitions
+      destination_state = transitions.to
 
       define_method "can_#{event_name}?" do
-        true
+        self.class.events[event_name.to_sym].transition?(from: current_state, to: destination_state)
       end
 
       define_method "#{event_name}!" do
-        self.current_state = transitions[:to]
+        unless send("can_#{event_name}?")
+          raise Error::IllegalTransition,
+                "Event #{event_name} doesn't allow transition
+                from #{current_state} to #{destination_state}"
+        end
+        self.current_state = destination_state
       end
     end
 
     def transitions(from:, to:)
       validate_states(from, to)
 
-      { from: Helpers.coerce_array(from).map(&:to_sym), to: to.to_sym }
+      Event.new(from: from, to: to)
     end
 
     def validate_states(*states)

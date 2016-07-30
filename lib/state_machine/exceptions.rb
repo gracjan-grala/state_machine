@@ -5,5 +5,6 @@ module StateMachine
     class UndefinedState < StateMachineError; end
     class InitialStateAlreadyDefined < StateMachineError; end
     class InitialStateMissing < StateMachineError; end
+    class IllegalTransition < StateMachineError; end
   end
 end
